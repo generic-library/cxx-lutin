@@ -23,7 +23,7 @@ def get_maintainer():
 	return ["LLVM Team"]
 
 def get_version():
-	return [3,4]
+	return [3,5,"dev"]
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
@@ -91,7 +91,9 @@ def create(target, module_name):
 			],
 			destination_path="include/support/win32")
 	# export flag that we use LLVM C++ lib
-	my_module.add_export_flag("c++", ["-D__STDCPP_LLVM__", "-nostdlib"])
+	my_module.add_export_flag("c++", ["-D__STDCPP_LLVM__"
+	 		#, "-nostdlib"
+	 		])
 	return my_module
 
 
