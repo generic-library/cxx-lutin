@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import lutin.module as module
 import lutin.tools as tools
+import lutin.debug as debug
 import os
 
 
@@ -91,7 +92,11 @@ def create(target, module_name):
 			],
 			destination_path="include/support/win32")
 	# export flag that we use LLVM C++ lib
-	my_module.add_export_flag("c++", ["-D__STDCPP_LLVM__", "-nostdlib"])
+	my_module.add_export_flag("c++", ["-D__STDCPP_LLVM__", "-nostdinc++"])
+	# remove some exception in linux system ...
+	my_module.compile_flags("c++", ["-D__GLIBCXX__"])
+	# dev add basic lib supc used for allocation and basic c++ environement ==> todo: set a basic constructor (-lSystem for MacOS)
+	my_module.add_export_flag("link", [target.stdlib_name_libsupc])
 	return my_module
 
 
