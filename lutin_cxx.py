@@ -65,7 +65,6 @@ def create(target, module_name):
 	my_module.compile_flags('c++', [
 		"-nostdinc++",
 		"-std=c++11",
-		"-fstrict-aliasing",
 		"-Wall",
 		"-Wextra",
 		"-Wshadow",
@@ -74,6 +73,9 @@ def create(target, module_name):
 		"-Wstrict-aliasing=2",
 		"-Wstrict-overflow=4"
 		])
+	my_module.add_export_flag('c++', [
+	    "-fstrict-aliasing"
+	    ])
 	# add local include path to build
 	my_module.add_path(os.path.join(tools.get_current_path(__file__), "cxx/include"))
 	my_module.add_header_file([
@@ -94,7 +96,9 @@ def create(target, module_name):
 	# export flag that we use LLVM C++ lib
 	my_module.add_export_flag("c++", ["-D__STDCPP_LLVM__", "-nostdinc++"])
 	# remove some exception in linux system ...
-	my_module.compile_flags("c++", ["-D__GLIBCXX__"])
+	my_module.add_export_flag("c++", ["-D__GLIBCXX__"])
+	my_module.add_export_flag("c++", ["-D__GLIBC__"])
+	my_module.add_export_flag("c++", ["-D_LIBCPP_NO_EXCEPTIONS", "-D__GLIBC__"])
 	# dev add basic lib supc used for allocation and basic c++ environement ==> todo: set a basic constructor (-lSystem for MacOS)
 	my_module.add_export_flag("link", [target.stdlib_name_libsupc])
 	return my_module
